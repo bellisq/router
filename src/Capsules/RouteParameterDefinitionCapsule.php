@@ -13,7 +13,7 @@ use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNam
  * @package bellisq/router
  * @since 1.0.0
  */
-class RouteParameterDefinition
+class RouteParameterDefinitionCapsule
 {
     public const PARAMETER_NAME_REGEX = '[a-zA-Z_][a-zA-Z0-9_]{0,63}';
 
