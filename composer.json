@@ -1,0 +1,31 @@
+{
+    "name": "bellisq/router",
+    "description": "Bellisq Router",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Showsay You",
+            "email": "akizuki.c10.l65@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "strictphp/property": "^2.0",
+        "bellisq/mvc": "^1.0",
+        "bellisq/request": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bellisq\\Router\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bellisq\\Router\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
+    }
+}
