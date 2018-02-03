@@ -2,6 +2,8 @@
 
 namespace Bellisq\Router;
 
+use Bellisq\Router\Capsules\RouteParameterDefinition;
+use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
 use Bellisq\Router\Exceptions\RouteParameters\InvalidKeyException;
 use Bellisq\Router\Exceptions\RouteParameters\NonStringValueException;
 use stdClass;
@@ -39,6 +41,7 @@ class RouteParameters
      *
      * @throws InvalidKeyException
      * @throws NonStringValueException
+     * @throws InappropriateParameterNameException
      */
     public function __construct(array $params)
     {
@@ -46,6 +49,7 @@ class RouteParameters
             if (!is_string($key)) {
                 throw new InvalidKeyException;
             }
+            RouteParameterDefinition::paramNameAppropriateOrFail($key);
 
             if (is_scalar($value)) {
                 $this->var[$key] = (string)$value;

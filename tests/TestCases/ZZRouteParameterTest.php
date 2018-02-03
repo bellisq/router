@@ -2,6 +2,7 @@
 
 namespace Bellisq\Router\Tests\TestCases;
 
+use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
 use Bellisq\Router\Exceptions\RouteParameters\InvalidKeyException;
 use Bellisq\Router\Exceptions\RouteParameters\NonStringValueException;
 use Bellisq\Router\RouteParameters;
@@ -49,7 +50,13 @@ class ZZRouteParameterTest
     public function testInvalidKey()
     {
         $this->expectException(InvalidKeyException::class);
-        new RouteParameters(['3']);
+        new RouteParameters(['29']);
+    }
+
+    public function testInappropriateKey()
+    {
+        $this->expectException(InappropriateParameterNameException::class);
+        new RouteParameters(['33-4' => '29']);
     }
 
     public function testNonScalarValue()
