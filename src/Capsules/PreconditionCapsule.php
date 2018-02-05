@@ -151,19 +151,27 @@ class PreconditionCapsule
      */
     public function generateUri(): string
     {
-        if (count($this->ports) !== 1) {
-            throw new MultipleCandidateException('port');
-        }
         if (count($this->schemes) !== 1) {
             throw new MultipleCandidateException('scheme');
         }
+        $scheme = $this->schemes[0];
+
         if (count($this->hosts) !== 1) {
             throw new MultipleCandidateException('host');
         }
-
-        $scheme = $this->schemes[0];
         $host = $this->hosts[0];
-        $port = $this->ports[0];
+
+        $pc = count($this->ports);
+        if ($pc === 0) {
+            $port = new PortCapsule(
+                $scheme->isHttp() ? Request::PORT_HTTP : Request::PORT_HTTPS
+            );
+        } else if ($pc !== 1) {
+            throw new MultipleCandidateException('port');
+        } else {
+            $port = $this->ports[0];
+        }
+
         if (($scheme->isHttp() && $port->getPort() === Request::PORT_HTTP)
             ||
             ($scheme->isHttps() && $port->getPort() === Request::PORT_HTTPS)) {
