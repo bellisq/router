@@ -24,7 +24,7 @@ class RouteParameterDefinitionCapsule
      * @param string $parameterName
      * @return bool
      */
-    public static function isParamNameAppropriate(string $parameterName): bool
+    final public static function isParamNameAppropriate(string $parameterName): bool
     {
         return 1 === preg_match('@^' . self::REGEX_PARAM_NAME . '$@u', $parameterName);
     }
@@ -36,7 +36,7 @@ class RouteParameterDefinitionCapsule
      *
      * @throws InappropriateParameterNameException
      */
-    public static function paramNameAppropriateOrFail(string $parameterName): void
+    final public static function paramNameAppropriateOrFail(string $parameterName): void
     {
         if (!self::isParamNameAppropriate($parameterName)) {
             throw new InappropriateParameterNameException;
@@ -54,7 +54,7 @@ class RouteParameterDefinitionCapsule
      * @param string $parameterType
      * @return bool
      */
-    public static function isParamTypeAppropriate(string $parameterType): bool
+    final public static function isParamTypeAppropriate(string $parameterType): bool
     {
         return isset(self::TYPES[$parameterType]);
     }
@@ -66,7 +66,7 @@ class RouteParameterDefinitionCapsule
      *
      * @throws InappropriateParameterTypeException
      */
-    public static function paramTypeAppropriateOrFail(string $parameterType): void
+    final public static function paramTypeAppropriateOrFail(string $parameterType): void
     {
         if (!self::isParamTypeAppropriate($parameterType)) {
             throw new InappropriateParameterTypeException;
