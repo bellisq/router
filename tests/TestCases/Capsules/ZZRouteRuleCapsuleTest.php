@@ -67,6 +67,8 @@ class ZZRouteRuleCapsuleTest
                 'type'     => '今月のデータ'
             ])
         ));
+
+        $this->assertEquals('/', (new RouteRuleCapsule(''))->generatePath(new RouteParameters([])));
     }
 
     public function testGenerateFailByGeneralValidation()
