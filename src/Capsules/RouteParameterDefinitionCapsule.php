@@ -16,7 +16,9 @@ use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTyp
  */
 class RouteParameterDefinitionCapsule
 {
-    public const REGEX_PARAM_NAME = '[a-zA-Z_][a-zA-Z0-9_]{0,63}';
+    public const REGEX_PARAM_NAME       = '[a-zA-Z_][a-zA-Z0-9_]{0,63}';
+    public const REGEX_PARAM_IDENTIFIER = '([a-zA-Z0-9\\._\\-]+)';
+    public const REGEX_PARAM_GENERAL    = '(.*)';
 
     /**
      * Check whether or not the parameter name is appropriate.
