@@ -48,6 +48,16 @@ class SchemeCapsule
         return $this->scheme;
     }
 
+    public function isHttp(): bool
+    {
+        return $this->scheme === self::SCHEME_HTTP;
+    }
+
+    public function isHttps(): bool
+    {
+        return $this->scheme === self::SCHEME_HTTPS;
+    }
+
     /** @var string */
     private $scheme;
 }

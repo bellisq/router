@@ -37,6 +37,7 @@ class MethodCapsule
      */
     public function __construct(string $method)
     {
+        $method = strtoupper($method);
         if (!isset(self::METHOD_CANDIDATES[$method])) {
             throw new DomainException;
         }
