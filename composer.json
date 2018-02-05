@@ -13,7 +13,7 @@
         "php": "^7.2",
         "strictphp/property": "^2.0",
         "bellisq/mvc": "^1.0",
-        "bellisq/request": "^1.0"
+        "bellisq/request": "^1.2"
     },
     "autoload": {
         "psr-4": {
