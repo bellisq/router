@@ -5,6 +5,8 @@ namespace Bellisq\Router\Tests\TestCases\Capsules;
 use Bellisq\Router\Capsules\RouteParameterDefinitionCapsule;
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTypeException;
+use Bellisq\Router\Exceptions\RouteParameterDefinition\ParameterRangeViolationException;
+use Bellisq\Router\RouteParameters;
 use PHPUnit\Framework\TestCase;
 
 
@@ -50,6 +52,23 @@ class ZZRouteParameterDefinitionCapsuleTest
         $this->assertEquals(self::APPROPRIATE_PARAM_NAME, $t->getName());
         $this->assertEquals('replacer', $t->getReplacer());
         $this->assertEquals('?', $t->getType());
+
+        $this->assertTrue(
+            $t->isSatisfiedWith(new RouteParameters([self::APPROPRIATE_PARAM_NAME => 'あああ']))
+        );
+        $t->satisfiedOrFail(new RouteParameters([self::APPROPRIATE_PARAM_NAME => 'あああ']));
+
+        $t = new RouteParameterDefinitionCapsule(self::APPROPRIATE_PARAM_NAME, 'replacer', ':');
+
+        $this->assertTrue(
+            $t->isSatisfiedWith(new RouteParameters([self::APPROPRIATE_PARAM_NAME => '12345']))
+        );
+        $this->assertFalse(
+            $t->isSatisfiedWith(new RouteParameters([self::APPROPRIATE_PARAM_NAME => 'あああ']))
+        );
+
+        $this->expectException(ParameterRangeViolationException::class);
+        $t->satisfiedOrFail(new RouteParameters([self::APPROPRIATE_PARAM_NAME => 'あああ']));
     }
 
     public function testConstructionFailByName()

@@ -4,6 +4,8 @@ namespace Bellisq\Router\Capsules;
 
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTypeException;
+use Bellisq\Router\Exceptions\RouteParameterDefinition\ParameterRangeViolationException;
+use Bellisq\Router\RouteParameters;
 
 
 /**
@@ -127,5 +129,36 @@ class RouteParameterDefinitionCapsule
     public function getType(): string
     {
         return $this->type;
+    }
+
+    private const REGEXES = [
+        self::TYPE_IDENTIFIER => '@^' . self::REGEX_PARAM_IDENTIFIER . '$@u',
+        self::TYPE_GENERAL    => '@^' . self::REGEX_PARAM_GENERAL . '$@u'
+    ];
+
+    /**
+     * Check whether or not the parameter value is appropriate.
+     *
+     * @param RouteParameters $params
+     * @return bool
+     */
+    public function isSatisfiedWith(RouteParameters $params): bool
+    {
+        return isset($params->{$this->getName()})
+            && (1 === preg_match(self::REGEXES[$this->getType()], $params->{$this->getName()}));
+    }
+
+    /**
+     * If the parameter value is inappropriate, throw an exception.
+     *
+     * @param RouteParameters $params
+     *
+     * @throws ParameterRangeViolationException
+     */
+    public function satisfiedOrFail(RouteParameters $params): void
+    {
+        if (!$this->isSatisfiedWith($params)) {
+            throw new ParameterRangeViolationException;
+        }
     }
 }
