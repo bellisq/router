@@ -15,7 +15,7 @@ use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNam
  */
 class RouteParameterDefinitionCapsule
 {
-    public const PARAMETER_NAME_REGEX = '[a-zA-Z_][a-zA-Z0-9_]{0,63}';
+    public const REGEX_PARAM_NAME = '[a-zA-Z_][a-zA-Z0-9_]{0,63}';
 
     /**
      * Check whether or not the parameter name is appropriate.
@@ -25,7 +25,7 @@ class RouteParameterDefinitionCapsule
      */
     public static function isParamNameAppropriate(string $parameterName): bool
     {
-        return 1 === preg_match('@^' . self::PARAMETER_NAME_REGEX . '$@u', $parameterName);
+        return 1 === preg_match('@^' . self::REGEX_PARAM_NAME . '$@u', $parameterName);
     }
 
     /**
