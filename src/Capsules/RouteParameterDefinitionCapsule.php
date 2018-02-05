@@ -3,6 +3,7 @@
 namespace Bellisq\Router\Capsules;
 
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
+use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTypeException;
 
 
 /**
@@ -39,6 +40,36 @@ class RouteParameterDefinitionCapsule
     {
         if (!self::isParamNameAppropriate($parameterName)) {
             throw new InappropriateParameterNameException;
+        }
+    }
+
+    public const TYPE_GENERAL    = '?';
+    public const TYPE_IDENTIFIER = ':';
+
+    private const TYPES = [self::TYPE_GENERAL => true, self::TYPE_IDENTIFIER => true];
+
+    /**
+     * Check whether or not the parameter type is appropriate.
+     *
+     * @param string $parameterType
+     * @return bool
+     */
+    public static function isParamTypeAppropriate(string $parameterType): bool
+    {
+        return isset(self::TYPES[$parameterType]);
+    }
+
+    /**
+     * If the parameter type is inappropriate, throw an exception.
+     *
+     * @param string $parameterType
+     *
+     * @throws InappropriateParameterTypeException
+     */
+    public static function paramTypeAppropriateOrFail(string $parameterType): void
+    {
+        if (!self::isParamTypeAppropriate($parameterType)) {
+            throw new InappropriateParameterTypeException;
         }
     }
 }
