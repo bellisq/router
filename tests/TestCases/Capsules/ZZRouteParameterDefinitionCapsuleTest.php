@@ -4,6 +4,7 @@ namespace Bellisq\Router\Tests\TestCases\Capsules;
 
 use Bellisq\Router\Capsules\RouteParameterDefinitionCapsule;
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
+use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTypeException;
 use PHPUnit\Framework\TestCase;
 
 
@@ -25,5 +26,41 @@ class ZZRouteParameterDefinitionCapsuleTest
 
         $this->expectException(InappropriateParameterNameException::class);
         RouteParameterDefinitionCapsule::paramNameAppropriateOrFail(self::INAPPROPRIATE_PARAM_NAME);
+    }
+
+    public function testTypeAppropriateness()
+    {
+        $this->assertTrue(RouteParameterDefinitionCapsule::isParamTypeAppropriate('?'));
+        $this->assertTrue(RouteParameterDefinitionCapsule::isParamTypeAppropriate(':'));
+        $this->assertFalse(RouteParameterDefinitionCapsule::isParamTypeAppropriate('/'));
+    }
+
+    public function testTypeAppropriateOrFail()
+    {
+        RouteParameterDefinitionCapsule::paramTypeAppropriateOrFail('?');
+
+        $this->expectException(InappropriateParameterTypeException::class);
+        RouteParameterDefinitionCapsule::paramTypeAppropriateOrFail('>');
+    }
+
+    public function testBehavior()
+    {
+        $t = new RouteParameterDefinitionCapsule(self::APPROPRIATE_PARAM_NAME, 'replacer', '?');
+
+        $this->assertEquals(self::APPROPRIATE_PARAM_NAME, $t->getName());
+        $this->assertEquals('replacer', $t->getReplacer());
+        $this->assertEquals('?', $t->getType());
+    }
+
+    public function testConstructionFailByName()
+    {
+        $this->expectException(InappropriateParameterNameException::class);
+        new RouteParameterDefinitionCapsule(self::INAPPROPRIATE_PARAM_NAME, 'replacer', '?');
+    }
+
+    public function testConstructionFailByType()
+    {
+        $this->expectException(InappropriateParameterTypeException::class);
+        new RouteParameterDefinitionCapsule(self::APPROPRIATE_PARAM_NAME, 'replacer', '<');
     }
 }

@@ -7,7 +7,7 @@ use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterTyp
 
 
 /**
- * [Class] Route Parameter Definition
+ * [Class] Route Parameter Definition (Immutable)
  *
  * @author Showsay You <akizuki.c10.l65@gmail.com>
  * @copyright 2018 Bellisq. All Rights Reserved.
@@ -71,5 +71,59 @@ class RouteParameterDefinitionCapsule
         if (!self::isParamTypeAppropriate($parameterType)) {
             throw new InappropriateParameterTypeException;
         }
+    }
+
+    /** @var string */
+    private $name;
+
+    /** @var string */
+    private $replacer;
+
+    /** @var string */
+    private $type;
+
+    /**
+     * RouteParameterDefinitionCapsule constructor.
+     *
+     * @param string $name
+     * @param string $replacer
+     * @param string $type
+     *
+     * @throws InappropriateParameterNameException
+     * @throws InappropriateParameterTypeException
+     */
+    public function __construct(string $name, string $replacer, string $type)
+    {
+        self::paramNameAppropriateOrFail($name);
+        self::paramTypeAppropriateOrFail($type);
+
+        $this->name = $name;
+        $this->replacer = $replacer;
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReplacer(): string
+    {
+        return $this->replacer;
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 }
