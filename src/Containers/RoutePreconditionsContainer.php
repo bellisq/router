@@ -4,6 +4,7 @@ namespace Bellisq\Router\Containers;
 
 use Bellisq\Request\Request;
 use Bellisq\Router\Capsules\HostCapsule;
+use Bellisq\Router\Capsules\MethodCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
 use Bellisq\Router\Capsules\PreconditionCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
@@ -32,6 +33,19 @@ class RoutePreconditionsContainer
     public function __construct(PreconditionCapsule $primaryPrecondition, PreconditionCapsule ...$preconditionCapsules)
     {
         array_unshift($preconditionCapsules, $primaryPrecondition);
+
+        // TODO
+        // convert
+        //   [
+        //     [[GET, POST],  [https], [example.com], [443]]
+        //     [[POST], [https], [example.com], [443]]
+        //     [[POST], [http],  [example.com], [443]]
+        //   ]
+        // into
+        //   [
+        //     [[GET, POST], [https], [example.com], [443]]
+        //   ]
+
         $this->preconditionCapsules = $preconditionCapsules;
     }
 
@@ -136,6 +150,32 @@ class RoutePreconditionsContainer
         if (count($na) === 0) {
             foreach ($this->preconditionCapsules as $preconditionCapsule) {
                 $na[] = $preconditionCapsule->withPorts($port);
+            }
+        }
+
+        $ret->preconditionCapsules = $na;
+        return $ret;
+    }
+
+    /**
+     * @param MethodCapsule $method
+     * @return RoutePreconditionsContainer
+     */
+    public function withMethod(MethodCapsule $method): self
+    {
+        $ret = clone $this;
+        $na = [];
+
+        foreach ($this->preconditionCapsules as $preconditionCapsule) {
+            $r = $preconditionCapsule->restrictMethod($method);
+            if (!is_null($r)) {
+                $na[] = $r;
+            }
+        }
+
+        if (count($na) === 0) {
+            foreach ($this->preconditionCapsules as $preconditionCapsule) {
+                $na[] = $preconditionCapsule->withMethods($method);
             }
         }
 
