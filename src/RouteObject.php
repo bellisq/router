@@ -4,6 +4,7 @@ namespace Bellisq\Router;
 
 use Bellisq\Request\Request;
 use Bellisq\Router\Capsules\HostCapsule;
+use Bellisq\Router\Capsules\MethodCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
 use Bellisq\Router\Capsules\RouteHandlerCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
@@ -22,8 +23,13 @@ use InvalidArgumentException;
  */
 class RouteObject
 {
+    /** @var RoutePreconditionsContainer */
     private $preconditionsContainer;
+
+    /** @var RouteRuleCapsule */
     private $ruleCapsule;
+
+    /** @var RouteHandlerCapsule */
     private $handlerCapsule;
 
     /**
@@ -107,6 +113,17 @@ class RouteObject
     {
         $ret = clone $this;
         $ret->preconditionsContainer = $ret->preconditionsContainer->withPort(new PortCapsule($port));
+        return $ret;
+    }
+
+    /**
+     * @param string $method
+     * @return RouteObject
+     */
+    public function withMethod(string $method): self
+    {
+        $ret = clone $this;
+        $ret->preconditionsContainer = $ret->preconditionsContainer->withMethod(new MethodCapsule($method));
         return $ret;
     }
 }
