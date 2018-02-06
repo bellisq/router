@@ -44,7 +44,7 @@ class RouteHandlerCapsule
             }
         }
 
-        $this->handler = clone $handler;
+        $this->handler = $handler;
     }
 
     /**
@@ -52,6 +52,6 @@ class RouteHandlerCapsule
      */
     public function getHandler(): Closure
     {
-        return clone $this->handler;
+        return $this->handler;
     }
 }
