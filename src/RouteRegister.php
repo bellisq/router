@@ -2,7 +2,7 @@
 
 namespace Bellisq\Router;
 
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
@@ -39,7 +39,7 @@ class RouteRegister
     {
         return new RouteRegisterWithRule(
             $this->container,
-            new RoutePreconditionsContainer(new PreconditionCapsule),
+            new RoutePreconditionsContainer(new RoutePreconditionCapsule),
             new RouteRuleCapsule($rule)
         );
     }

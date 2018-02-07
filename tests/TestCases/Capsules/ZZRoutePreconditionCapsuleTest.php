@@ -7,13 +7,13 @@ use Bellisq\Request\RequestMutable;
 use Bellisq\Router\Capsules\HostCapsule;
 use Bellisq\Router\Capsules\MethodCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
-use Bellisq\Router\Exceptions\PreconditionCapsule\MultipleCandidateException;
+use Bellisq\Router\Exceptions\RoutePreconditionCapsule\MultipleCandidateException;
 use PHPUnit\Framework\TestCase;
 
 
-class ZZPreconditionCapsuleTest
+class ZZRoutePreconditionCapsuleTest
     extends TestCase
 {
     /** @var RequestMutable */
@@ -29,7 +29,7 @@ class ZZPreconditionCapsuleTest
 
     public function testBehavior()
     {
-        $px = new PreconditionCapsule;
+        $px = new RoutePreconditionCapsule;
 
         $pc = $px;
         $this->assertTrue($pc->isSatisfiedWith(new Request($this->reqM)));
@@ -103,7 +103,7 @@ class ZZPreconditionCapsuleTest
 
     public function testMCPort()
     {
-        $pc = (new PreconditionCapsule)->withPorts(new PortCapsule(79), new PortCapsule(80));
+        $pc = (new RoutePreconditionCapsule)->withPorts(new PortCapsule(79), new PortCapsule(80));
 
         $this->expectException(MultipleCandidateException::class);
         $pc->generateUri();
@@ -111,7 +111,7 @@ class ZZPreconditionCapsuleTest
 
     public function testMCScheme()
     {
-        $pc = (new PreconditionCapsule)->withSchemes(new SchemeCapsule('HTTP'), new SchemeCapsule('HTTPS'));
+        $pc = (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('HTTP'), new SchemeCapsule('HTTPS'));
 
         $this->expectException(MultipleCandidateException::class);
         $pc->generateUri();
@@ -119,7 +119,7 @@ class ZZPreconditionCapsuleTest
 
     public function testMCHost()
     {
-        $pc = (new PreconditionCapsule)->withHosts(new HostCapsule('ff.com'), new HostCapsule('gg.com'));
+        $pc = (new RoutePreconditionCapsule)->withHosts(new HostCapsule('ff.com'), new HostCapsule('gg.com'));
 
         $this->expectException(MultipleCandidateException::class);
         $pc->generateUri();

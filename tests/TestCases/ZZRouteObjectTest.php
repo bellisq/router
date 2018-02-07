@@ -6,7 +6,7 @@ use Bellisq\MVC\ViewAbstract;
 use Bellisq\Request\Request;
 use Bellisq\Request\RequestMutable;
 use Bellisq\Router\Capsules\HostCapsule;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteHandlerCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
@@ -29,8 +29,8 @@ class ZZRouteObjectTest
     {
         $this->ro = new RouteObject(
             new RoutePreconditionsContainer(
-                (new PreconditionCapsule)->withSchemes(new SchemeCapsule('http'))->withHosts(new HostCapsule('www.example.com')),
-                (new PreconditionCapsule)->withSchemes(new SchemeCapsule('https'))->withHosts(new HostCapsule('secure.example.com'))
+                (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('http'))->withHosts(new HostCapsule('www.example.com')),
+                (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('https'))->withHosts(new HostCapsule('secure.example.com'))
             ),
             (new RouteRuleCapsule('/{:t1}/{:t2}'))->withConstraint('t1', '@^[a-z]{3}$@u'),
             new RouteHandlerCapsule(function (): ViewAbstract {
@@ -47,8 +47,8 @@ class ZZRouteObjectTest
 
         $ro = new RouteObject(
             new RoutePreconditionsContainer(
-                (new PreconditionCapsule)->withSchemes(new SchemeCapsule('http'))->withHosts(new HostCapsule('www.example.com')),
-                (new PreconditionCapsule)->withSchemes(new SchemeCapsule('https'))->withHosts(new HostCapsule('secure.example.com'))
+                (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('http'))->withHosts(new HostCapsule('www.example.com')),
+                (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('https'))->withHosts(new HostCapsule('secure.example.com'))
             ),
             (new RouteRuleCapsule('/')),
             new RouteHandlerCapsule(function (): ViewAbstract {
