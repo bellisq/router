@@ -6,7 +6,7 @@ use Bellisq\Request\Request;
 use Bellisq\Router\Capsules\HostCapsule;
 use Bellisq\Router\Capsules\MethodCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Exceptions\RoutePreconditionsContainer\MultiplePreconditionException;
 
@@ -21,16 +21,16 @@ use Bellisq\Router\Exceptions\RoutePreconditionsContainer\MultiplePreconditionEx
  */
 class RoutePreconditionsContainer
 {
-    /** @var PreconditionCapsule[] */
+    /** @var RoutePreconditionCapsule[] */
     private $preconditionCapsules;
 
     /**
      * RoutePreconditionsContainer constructor.
      *
-     * @param PreconditionCapsule   $primaryPrecondition
-     * @param PreconditionCapsule[] ...$preconditionCapsules
+     * @param RoutePreconditionCapsule   $primaryPrecondition
+     * @param RoutePreconditionCapsule[] ...$preconditionCapsules
      */
-    public function __construct(PreconditionCapsule $primaryPrecondition, PreconditionCapsule ...$preconditionCapsules)
+    public function __construct(RoutePreconditionCapsule $primaryPrecondition, RoutePreconditionCapsule ...$preconditionCapsules)
     {
         array_unshift($preconditionCapsules, $primaryPrecondition);
 

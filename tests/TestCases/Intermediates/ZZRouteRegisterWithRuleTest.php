@@ -3,7 +3,7 @@
 namespace Bellisq\Router\Tests\TestCases\Intermediates;
 
 use Bellisq\MVC\ViewAbstract;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
@@ -21,7 +21,7 @@ class ZZRouteRegisterWithRuleTest
         $rrwr = new RouteRegisterWithRule(
             $rc = new RoutesContainer,
             new RoutePreconditionsContainer(
-                new PreconditionCapsule
+                new RoutePreconditionCapsule
             ),
             new RouteRuleCapsule('/{:param1}')
         );

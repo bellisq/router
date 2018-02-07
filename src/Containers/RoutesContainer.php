@@ -4,6 +4,7 @@ namespace Bellisq\Router\Containers;
 
 use ArrayAccess;
 use BadMethodCallException;
+use Bellisq\Router\Exceptions\RoutesContainer\DuplicateRouteNameException;
 use Bellisq\Router\Iterators\RoutesArrayIterator;
 use Bellisq\Router\RouteObject;
 use Countable;
@@ -27,12 +28,17 @@ class RoutesContainer
     /**
      * @param null|string $name
      * @param RouteObject $routeObject
+     *
+     * @throws DuplicateRouteNameException
      */
     public function addRoute(?string $name, RouteObject $routeObject): void
     {
         if (is_null($name)) {
             $this->routes[] = $routeObject;
         } else {
+            if (isset($this->routes[$name])) {
+                throw new DuplicateRouteNameException;
+            }
             $this->routes[$name] = $routeObject;
         }
     }

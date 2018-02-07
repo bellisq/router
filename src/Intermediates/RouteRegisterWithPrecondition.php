@@ -5,7 +5,7 @@ namespace Bellisq\Router\Intermediates;
 use Bellisq\Router\Capsules\HostCapsule;
 use Bellisq\Router\Capsules\MethodCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
@@ -30,20 +30,20 @@ class RouteRegisterWithPrecondition
     /** @var RoutesContainer */
     private $container;
 
-    /** @var PreconditionCapsule[] */
+    /** @var RoutePreconditionCapsule[] */
     private $conditions = [];
 
-    /** @var PreconditionCapsule */
+    /** @var RoutePreconditionCapsule */
     private $currentCondition;
 
     /**
      * RouteRegisterWithPrecondition constructor.
      *
-     * @param RoutesContainer       $container
-     * @param PreconditionCapsule   $current
-     * @param PreconditionCapsule[] ...$conditions
+     * @param RoutesContainer            $container
+     * @param RoutePreconditionCapsule   $current
+     * @param RoutePreconditionCapsule[] ...$conditions
      */
-    public function __construct(RoutesContainer $container, PreconditionCapsule $current, PreconditionCapsule ...$conditions)
+    public function __construct(RoutesContainer $container, RoutePreconditionCapsule $current, RoutePreconditionCapsule ...$conditions)
     {
         parent::__construct();
         $this->container = $container;

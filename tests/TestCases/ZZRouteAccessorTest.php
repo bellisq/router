@@ -1,23 +1,30 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: 4kizuki
+ * Date: 2018/02/07
+ * Time: 9:24
+ */
 
-namespace Bellisq\Router\Tests\TestCases\Containers;
+namespace Bellisq\Router\Tests\TestCases;
 
-use BadMethodCallException;
+
 use Bellisq\MVC\ViewAbstract;
 use Bellisq\Router\Capsules\HostCapsule;
-use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteHandlerCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
-use Bellisq\Router\Exceptions\RoutesContainer\DuplicateRouteNameException;
+use Bellisq\Router\Exceptions\RoutesAccessor\UndefinedRouteException;
 use Bellisq\Router\RouteObject;
+use Bellisq\Router\RoutesAccessor;
 use Bellisq\Router\Tests\Mocks\Capsules\ZZViewMock;
 use PHPUnit\Framework\TestCase;
 
 
-class ZZRoutesContainerTest
+class ZZRouteAccessorTest
     extends TestCase
 {
     /** @var RoutesContainer */
@@ -28,6 +35,9 @@ class ZZRoutesContainerTest
 
     /** @var RouteObject */
     private $ro2;
+
+    /** @var RoutesAccessor */
+    private $ra;
 
     public function setUp()
     {
@@ -40,7 +50,7 @@ class ZZRoutesContainerTest
             ),
             (new RouteRuleCapsule('/{:t1}/{:t2}'))->withConstraint('t1', '@^[a-z]{3}$@u'),
             new RouteHandlerCapsule(function (): ViewAbstract {
-                return new ZZViewMock();
+                return new ZZViewMock;
             })
         );
 
@@ -51,47 +61,25 @@ class ZZRoutesContainerTest
             ),
             (new RouteRuleCapsule('/api/{:t1}/{:t2}'))->withConstraint('t1', '@^[a-z]{3}$@u'),
             new RouteHandlerCapsule(function (): ViewAbstract {
-                return new ZZViewMock();
+                return new ZZViewMock;
             })
         );
+
+        $this->container->addRoute('www', $this->ro1);
+        $this->container->addRoute('api', $this->ro2);
+
+        $this->ra = new RoutesAccessor($this->container);
     }
 
     public function testBehavior()
     {
-        $this->container->addRoute(null, $this->ro1);
-        $this->container->addRoute('api', $this->ro2);
-
-        $n = [];
-        foreach ($this->container as $value) {
-            $n[] = $value;
-        }
-
-        $this->assertTrue(2 === count($this->container));
-        $this->assertTrue(2 === count($n));
-        $this->assertTrue($n[0] === $this->ro1);
-        $this->assertTrue($this->container[0] === $this->ro1);
-        $this->assertTrue($this->container['api'] === $this->ro2);
-        $this->assertTrue(isset($this->container[0]));
-        $this->assertTrue(isset($this->container['api']));
-        $this->assertFalse(isset($this->container['www']));
+        $this->assertEquals('http://www.example.com/xxx/lol', $this->ra->get('www')->withScheme('http')->generateUri(['t1' => 'xxx', 't2' => 'lol']));
+        $this->assertEquals('http://www.example.com/api/xxx/lol', $this->ra->get('api')->withScheme('http')->generateUri(['t1' => 'xxx', 't2' => 'lol']));
     }
 
-    public function testSet()
+    public function testError()
     {
-        $this->expectException(BadMethodCallException::class);
-        $this->container['t'] = 3;
-    }
-
-    public function testUnset()
-    {
-        $this->expectException(BadMethodCallException::class);
-        unset($this->container['t']);
-    }
-
-    public function testDuplicate()
-    {
-        $this->expectException(DuplicateRouteNameException::class);
-        $this->container->addRoute('api', $this->ro1);
-        $this->container->addRoute('api', $this->ro2);
+        $this->expectException(UndefinedRouteException::class);
+        $this->ra->get('xxx');
     }
 }

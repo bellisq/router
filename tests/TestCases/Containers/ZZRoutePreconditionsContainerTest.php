@@ -6,7 +6,7 @@ use Bellisq\Request\Request;
 use Bellisq\Request\RequestMutable;
 use Bellisq\Router\Capsules\HostCapsule;
 use Bellisq\Router\Capsules\PortCapsule;
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Exceptions\RoutePreconditionsContainer\MultiplePreconditionException;
@@ -18,7 +18,7 @@ class ZZRoutePreconditionsContainerTest
 {
     public function testBehavior()
     {
-        $v1 = (new PreconditionCapsule())->withSchemes(new SchemeCapsule('HTTP'))->withHosts(new HostCapsule('example.org'));
+        $v1 = (new RoutePreconditionCapsule())->withSchemes(new SchemeCapsule('HTTP'))->withHosts(new HostCapsule('example.org'));
 
         $v2 = $v1->withPorts(new PortCapsule(80));
         $rpc = new RoutePreconditionsContainer($v2);
@@ -26,7 +26,7 @@ class ZZRoutePreconditionsContainerTest
 
         $rpc = new RoutePreconditionsContainer(
             $v1,
-            (new PreconditionCapsule())->withSchemes(new SchemeCapsule('HTTPS'))->withHosts(new HostCapsule('example.jp'))
+            (new RoutePreconditionCapsule())->withSchemes(new SchemeCapsule('HTTPS'))->withHosts(new HostCapsule('example.jp'))
         );
         $reqM = new RequestMutable([
             'REMOTE_ADDR' => '127.0.0.1',
@@ -50,8 +50,8 @@ class ZZRoutePreconditionsContainerTest
     public function testWithRestriction()
     {
         $rpc = new RoutePreconditionsContainer(
-            (new PreconditionCapsule())->withSchemes(new SchemeCapsule('HTTP'))->withHosts(new HostCapsule('example.org')),
-            (new PreconditionCapsule())->withSchemes(new SchemeCapsule('HTTPS'))->withHosts(new HostCapsule('example.jp'))
+            (new RoutePreconditionCapsule())->withSchemes(new SchemeCapsule('HTTP'))->withHosts(new HostCapsule('example.org')),
+            (new RoutePreconditionCapsule())->withSchemes(new SchemeCapsule('HTTPS'))->withHosts(new HostCapsule('example.jp'))
         );
 
         $reqM = new RequestMutable([

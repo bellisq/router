@@ -3,18 +3,18 @@
 namespace Bellisq\Router\Capsules;
 
 use Bellisq\Request\Request;
-use Bellisq\Router\Exceptions\PreconditionCapsule\MultipleCandidateException;
+use Bellisq\Router\Exceptions\RoutePreconditionCapsule\MultipleCandidateException;
 
 
 /**
- * [Class] Precondition Capsule (Immutable)
+ * [Class] Route Precondition Capsule (Immutable)
  *
  * @author Showsay You <akizuki.c10.l65@gmail.com>
  * @copyright 2018 Bellisq. All Rights Reserved.
  * @package bellisq/router
  * @since 1.0.0
  */
-class PreconditionCapsule
+class RoutePreconditionCapsule
 {
     /** @var PortCapsule[] */
     private $ports = [];
@@ -30,7 +30,7 @@ class PreconditionCapsule
 
     /**
      * @param PortCapsule[] ...$ports
-     * @return PreconditionCapsule
+     * @return RoutePreconditionCapsule
      */
     public function withPorts(PortCapsule ...$ports): self
     {
@@ -41,7 +41,7 @@ class PreconditionCapsule
 
     /**
      * @param MethodCapsule[] ...$methods
-     * @return PreconditionCapsule
+     * @return RoutePreconditionCapsule
      */
     public function withMethods(MethodCapsule ...$methods): self
     {
@@ -52,7 +52,7 @@ class PreconditionCapsule
 
     /**
      * @param SchemeCapsule[] ...$schemes
-     * @return PreconditionCapsule
+     * @return RoutePreconditionCapsule
      */
     public function withSchemes(SchemeCapsule ...$schemes): self
     {
@@ -63,7 +63,7 @@ class PreconditionCapsule
 
     /**
      * @param HostCapsule[] ...$hosts
-     * @return PreconditionCapsule
+     * @return RoutePreconditionCapsule
      */
     public function withHosts(HostCapsule ...$hosts): self
     {
@@ -74,7 +74,7 @@ class PreconditionCapsule
 
     /**
      * @param MethodCapsule $newMethod
-     * @return PreconditionCapsule|null
+     * @return RoutePreconditionCapsule|null
      */
     public function restrictMethod(MethodCapsule $newMethod): ?self
     {
@@ -92,7 +92,7 @@ class PreconditionCapsule
 
     /**
      * @param PortCapsule $newPort
-     * @return PreconditionCapsule|null
+     * @return RoutePreconditionCapsule|null
      */
     public function restrictPort(PortCapsule $newPort): ?self
     {
@@ -110,7 +110,7 @@ class PreconditionCapsule
 
     /**
      * @param SchemeCapsule $newScheme
-     * @return PreconditionCapsule|null
+     * @return RoutePreconditionCapsule|null
      */
     public function restrictScheme(SchemeCapsule $newScheme): ?self
     {
@@ -128,7 +128,7 @@ class PreconditionCapsule
 
     /**
      * @param HostCapsule $newHost
-     * @return PreconditionCapsule|null
+     * @return RoutePreconditionCapsule|null
      */
     public function restrictHost(HostCapsule $newHost): ?self
     {

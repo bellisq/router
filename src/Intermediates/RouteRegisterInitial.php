@@ -2,7 +2,7 @@
 
 namespace Bellisq\Router\Intermediates;
 
-use Bellisq\Router\Capsules\PreconditionCapsule;
+use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Containers\RoutesContainer;
 
 
@@ -19,16 +19,16 @@ class RouteRegisterInitial
     /** @var RoutesContainer */
     protected $container;
 
-    /** @var PreconditionCapsule[] */
+    /** @var RoutePreconditionCapsule[] */
     protected $conditions;
 
     /**
      * RouteRegisterInitial constructor.
      *
-     * @param RoutesContainer       $container
-     * @param PreconditionCapsule[] ...$conditions
+     * @param RoutesContainer            $container
+     * @param RoutePreconditionCapsule[] ...$conditions
      */
-    public function __construct(RoutesContainer $container, PreconditionCapsule ...$conditions)
+    public function __construct(RoutesContainer $container, RoutePreconditionCapsule ...$conditions)
     {
         $this->container = $container;
         $this->conditions = $conditions;
@@ -75,6 +75,6 @@ class RouteRegisterInitial
      */
     private function createRRWRCopy(): RouteRegisterWithPrecondition
     {
-        return new RouteRegisterWithPrecondition($this->container, new PreconditionCapsule, ...$this->conditions);
+        return new RouteRegisterWithPrecondition($this->container, new RoutePreconditionCapsule, ...$this->conditions);
     }
 }
