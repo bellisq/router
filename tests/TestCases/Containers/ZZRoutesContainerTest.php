@@ -11,6 +11,7 @@ use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
+use Bellisq\Router\Exceptions\RoutesContainer\DuplicateRouteNameException;
 use Bellisq\Router\RouteObject;
 use Bellisq\Router\Tests\Mocks\Capsules\ZZViewMock;
 use PHPUnit\Framework\TestCase;
@@ -85,5 +86,12 @@ class ZZRoutesContainerTest
     {
         $this->expectException(BadMethodCallException::class);
         unset($this->container['t']);
+    }
+
+    public function testDuplicate()
+    {
+        $this->expectException(DuplicateRouteNameException::class);
+        $this->container->addRoute('api', $this->ro1);
+        $this->container->addRoute('api', $this->ro2);
     }
 }
