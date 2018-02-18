@@ -53,7 +53,7 @@ class RouteObject
      * @param array|RouteParameters $params
      * @return string
      */
-    public function generateUri($params): string
+    public function generateUri($params = []): string
     {
         if (!($params instanceof RouteParameters)) {
             if (!is_array($params)) {
@@ -62,7 +62,24 @@ class RouteObject
             $params = new RouteParameters($params);
         }
 
-        return rtrim($this->preconditionsContainer->generateUri() . $this->ruleCapsule->generatePath($params), '/');
+        return rtrim($this->preconditionsContainer->generateUri() . $this->generatePath($params), '/');
+    }
+
+    /**
+     * @param array|RouteParameters $params
+     * @return string
+     */
+    public function generatePath($params = []): string
+    {
+        if (!($params instanceof RouteParameters)) {
+            if (!is_array($params)) {
+                throw new InvalidArgumentException('Argument 1 passed to ' . __METHOD__ . '() must be of the type array or ' . RouteParameters::class . ', ' . gettype($params) . ' given.');
+            }
+            $params = new RouteParameters($params);
+        }
+
+        $r = rtrim($this->ruleCapsule->generatePath($params), '/');
+        return $r === '' ? '/' : $r;
     }
 
     /**
