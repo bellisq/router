@@ -44,6 +44,8 @@ class ZZRouteObjectTest
     {
         $this->assertEquals('https://secure.example.com/zzz/lol',
             $this->ro->withScheme('https')->generateUri(['t1' => 'zzz', 't2' => 'lol']));
+        $this->assertEquals('/zzz/lol',
+            $this->ro->withScheme('https')->generatePath(['t1' => 'zzz', 't2' => 'lol']));
 
         $ro = new RouteObject(
             new RoutePreconditionsContainer(
@@ -58,6 +60,9 @@ class ZZRouteObjectTest
 
         $this->assertEquals('https://secure.example.com',
             $ro->withScheme('https')->generateUri(new RouteParameters([])));
+
+        $this->assertEquals('/',
+            $ro->withScheme('https')->generatePath(new RouteParameters([])));
 
         $this->expectException(InvalidArgumentException::class);
         $ro->withScheme('https')->generateUri(3);
