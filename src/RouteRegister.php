@@ -20,6 +20,7 @@ use Bellisq\Router\Intermediates\RouteRegisterWithRule;
  */
 class RouteRegister
     extends RouteRegisterInitial
+    implements RoutableInterface
 {
     /**
      * RouteRegister constructor.
@@ -32,8 +33,7 @@ class RouteRegister
     }
 
     /**
-     * @param string $rule
-     * @return RouteRegisterWithRule
+     * @inheritdoc
      */
     public function route(string $rule): RouteRegisterWithRule
     {

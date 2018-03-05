@@ -10,6 +10,7 @@ use Bellisq\Router\Capsules\RouteRuleCapsule;
 use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
+use Bellisq\Router\RoutableInterface;
 use Strict\Property\Intermediate\PropertyRegister;
 use Strict\Property\Utility\StrictPropertyContainer;
 
@@ -26,6 +27,7 @@ use Strict\Property\Utility\StrictPropertyContainer;
  */
 class RouteRegisterWithPrecondition
     extends StrictPropertyContainer
+    implements RoutableInterface
 {
     /** @var RoutesContainer */
     private $container;
@@ -138,8 +140,7 @@ class RouteRegisterWithPrecondition
     }
 
     /**
-     * @param string $rule
-     * @return RouteRegisterWithRule
+     * @inheritdoc
      */
     public function route(string $rule): RouteRegisterWithRule
     {
