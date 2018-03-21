@@ -24,6 +24,8 @@ use Strict\Property\Utility\StrictPropertyContainer;
  * @since 1.0.0
  *
  * @property-read RouteRegisterInitial $or
+ *
+ * @internal
  */
 class RouteRegisterWithPrecondition
     extends StrictPropertyContainer
