@@ -13,7 +13,8 @@
         "php": "^7.2",
         "strictphp/property": "^2.0",
         "bellisq/mvc": "^1.0",
-        "bellisq/request": "^1.2"
+        "bellisq/request": "^1.2",
+        "bellisq/type-map": "^2.0"
     },
     "autoload": {
         "psr-4": {
