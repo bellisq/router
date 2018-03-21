@@ -2,20 +2,20 @@
 
 namespace Bellisq\Router\Tests\TestCases\Capsules;
 
-use Bellisq\Router\Capsules\RouteConstraintCapsule;
+use Bellisq\Router\Capsules\RouteRegexConstraintCapsule;
 use Bellisq\Router\Exceptions\RouteConstraint\ConstraintViolationException;
 use Bellisq\Router\Exceptions\RouteParameterDefinition\InappropriateParameterNameException;
 use Bellisq\Router\RouteParameters;
 use PHPUnit\Framework\TestCase;
 
 
-class ZZRouteConstraintCapsuleTest
+class ZZRouteRegexConstraintCapsuleTest
     extends TestCase
 {
     public function testBehavior()
     {
         $pn = 'paramName';
-        $rcc = new RouteConstraintCapsule($pn, '@^[a-z]{3}$@u');
+        $rcc = new RouteRegexConstraintCapsule($pn, '@^[a-z]{3}$@u');
         $this->assertTrue($rcc->isSatisfiedWith(new RouteParameters([$pn => 'php'])));
         $this->assertFalse($rcc->isSatisfiedWith(new RouteParameters([$pn => 'crud'])));
 
@@ -28,6 +28,6 @@ class ZZRouteConstraintCapsuleTest
     public function testInappropriateParamName()
     {
         $this->expectException(InappropriateParameterNameException::class);
-        new RouteConstraintCapsule('0_a', '@^$@u');
+        new RouteRegexConstraintCapsule('0_a', '@^$@u');
     }
 }

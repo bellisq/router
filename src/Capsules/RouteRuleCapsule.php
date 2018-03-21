@@ -4,7 +4,7 @@ namespace Bellisq\Router\Capsules;
 
 use Bellisq\Router\Exceptions\RouteRuleCapsule\DuplicateParameterNameException;
 use Bellisq\Router\Exceptions\RouteRuleCapsule\InvalidConstraintException;
-use Bellisq\Router\Capsules\RouteConstraintCapsule;
+use Bellisq\Router\Capsules\RouteRegexConstraintCapsule;
 use Bellisq\Router\RouteParameters;
 
 
@@ -29,7 +29,7 @@ class RouteRuleCapsule
     /** @var string */
     private $regex;
 
-    /** @var RouteConstraintCapsule[] */
+    /** @var RouteConstraintCapsuleInterface[] */
     private $constraints = [];
 
     /**
@@ -98,14 +98,14 @@ class RouteRuleCapsule
      *
      * @throws InvalidConstraintException
      */
-    public function withConstraint(string $paramName, string $regex): self
+    public function withRegexConstraint(string $paramName, string $regex): self
     {
         if (!isset($this->parameterDefinitions[$paramName])) {
             throw new InvalidConstraintException;
         }
 
         $ret = clone $this;
-        $ret->constraints[] = new RouteConstraintCapsule($paramName, $regex);
+        $ret->constraints[] = new RouteRegexConstraintCapsule($paramName, $regex);
         return $ret;
     }
 

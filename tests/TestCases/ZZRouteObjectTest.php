@@ -32,7 +32,7 @@ class ZZRouteObjectTest
                 (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('http'))->withHosts(new HostCapsule('www.example.com')),
                 (new RoutePreconditionCapsule)->withSchemes(new SchemeCapsule('https'))->withHosts(new HostCapsule('secure.example.com'))
             ),
-            (new RouteRuleCapsule('/{:t1}/{:t2}'))->withConstraint('t1', '@^[a-z]{3}$@u'),
+            (new RouteRuleCapsule('/{:t1}/{:t2}'))->withRegexConstraint('t1', '@^[a-z]{3}$@u'),
             new RouteHandlerCapsule(function (): ViewAbstract {
                 return new ZZViewMock;
             })

@@ -20,14 +20,14 @@ class ZZRouteRuleCapsuleTest
     public function setUp()
     {
         $this->routeRule = (new RouteRuleCapsule('/{:username}/{:month}/{?type}'))
-            ->withConstraint('username', '@^[a-zA-Z_][a-zA-Z0-9_]{4,14}$@u')
-            ->withConstraint('month', '@^(10|11|12|[1-9]{1})$@');
+            ->withRegexConstraint('username', '@^[a-zA-Z_][a-zA-Z0-9_]{4,14}$@u')
+            ->withRegexConstraint('month', '@^(10|11|12|[1-9]{1})$@');
     }
 
     public function testInvalidConstraint()
     {
         $this->expectException(InvalidConstraintException::class);
-        $this->routeRule->withConstraint('unregisteredParamName', '');
+        $this->routeRule->withRegexConstraint('unregisteredParamName', '');
     }
 
     public function testMatch()
