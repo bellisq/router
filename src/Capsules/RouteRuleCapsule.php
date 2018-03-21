@@ -4,8 +4,11 @@ namespace Bellisq\Router\Capsules;
 
 use Bellisq\Router\Exceptions\RouteRuleCapsule\DuplicateParameterNameException;
 use Bellisq\Router\Exceptions\RouteRuleCapsule\InvalidConstraintException;
-use Bellisq\Router\Capsules\RouteConstraintCapsule;
+use Bellisq\Router\Capsules\RouteRegexConstraintCapsule;
 use Bellisq\Router\RouteParameters;
+use Bellisq\TypeMap\TypeMapInterface;
+use Bellisq\TypeMap\Utility\ObjectContainer;
+use Closure;
 
 
 /**
@@ -15,6 +18,8 @@ use Bellisq\Router\RouteParameters;
  * @copyright 2018 Bellisq. All Rights Reserved.
  * @package bellisq/router
  * @since 1.0.0
+ *
+ * @internal
  */
 class RouteRuleCapsule
 {
@@ -27,16 +32,21 @@ class RouteRuleCapsule
     /** @var string */
     private $regex;
 
-    /** @var RouteConstraintCapsule[] */
+    /** @var RouteConstraintCapsuleInterface[] */
     private $constraints = [];
+
+    /** @var TypeMapInterface|ObjectContainer */
+    private $injection;
 
     /**
      * RouteRuleCapsule constructor.
      *
      * @param string $rule
+     * @param TypeMapInterface|null $constraintClosureInjection
      */
-    public function __construct(string $rule)
+    public function __construct(string $rule, ?TypeMapInterface $constraintClosureInjection = null)
     {
+        $constraintClosureInjection = $constraintClosureInjection ?? new ObjectContainer;
         $rule = '/' . trim($rule, '/');
         preg_match_all(
             '@\\{(' .
@@ -87,6 +97,7 @@ class RouteRuleCapsule
 
         $this->stdRule = $raw;
         $this->regex = "@^{$regex}$@u";
+        $this->injection = $constraintClosureInjection;
     }
 
     /**
@@ -96,14 +107,27 @@ class RouteRuleCapsule
      *
      * @throws InvalidConstraintException
      */
-    public function withConstraint(string $paramName, string $regex): self
+    public function withRegexConstraint(string $paramName, string $regex): self
     {
         if (!isset($this->parameterDefinitions[$paramName])) {
             throw new InvalidConstraintException;
         }
 
         $ret = clone $this;
-        $ret->constraints[] = new RouteConstraintCapsule($paramName, $regex);
+        $ret->constraints[] = new RouteRegexConstraintCapsule($paramName, $regex);
+        return $ret;
+    }
+
+    /**
+     * @param Closure $closure
+     * @return RouteRuleCapsule
+     *
+     * @since 1.4.0
+     */
+    public function withClosureConstraint(Closure $closure): self
+    {
+        $ret = clone $this;
+        $ret->constraints[] = new RouteClosureConstraintCapsule($closure, $this->injection);
         return $ret;
     }
 

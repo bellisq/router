@@ -11,6 +11,7 @@ use Bellisq\Router\Capsules\SchemeCapsule;
 use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
 use Bellisq\Router\RoutableInterface;
+use Bellisq\TypeMap\TypeMapInterface;
 use Strict\Property\Intermediate\PropertyRegister;
 use Strict\Property\Utility\StrictPropertyContainer;
 
@@ -24,6 +25,8 @@ use Strict\Property\Utility\StrictPropertyContainer;
  * @since 1.0.0
  *
  * @property-read RouteRegisterInitial $or
+ *
+ * @internal
  */
 class RouteRegisterWithPrecondition
     extends StrictPropertyContainer
@@ -38,15 +41,19 @@ class RouteRegisterWithPrecondition
     /** @var RoutePreconditionCapsule */
     private $currentCondition;
 
+    private $typeMap;
+
     /**
      * RouteRegisterWithPrecondition constructor.
      *
-     * @param RoutesContainer            $container
-     * @param RoutePreconditionCapsule   $current
+     * @param RoutesContainer $container
+     * @param RoutePreconditionCapsule $current
+     * @param TypeMapInterface|null $typeMap
      * @param RoutePreconditionCapsule[] ...$conditions
      */
-    public function __construct(RoutesContainer $container, RoutePreconditionCapsule $current, RoutePreconditionCapsule ...$conditions)
+    public function __construct(RoutesContainer $container, RoutePreconditionCapsule $current, ?TypeMapInterface $typeMap, RoutePreconditionCapsule ...$conditions)
     {
+        $this->typeMap = $typeMap;
         parent::__construct();
         $this->container = $container;
         $this->conditions = $conditions;
@@ -67,7 +74,7 @@ class RouteRegisterWithPrecondition
      */
     public function forMethod(string ...$methods): RouteRegisterWithPrecondition
     {
-        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, ...$this->conditions);
+        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, $this->typeMap, ...$this->conditions);
 
         $na = [];
         foreach ($methods as $method) {
@@ -84,7 +91,7 @@ class RouteRegisterWithPrecondition
      */
     public function forScheme(string ...$schemes): RouteRegisterWithPrecondition
     {
-        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, ...$this->conditions);
+        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, $this->typeMap, ...$this->conditions);
 
         $na = [];
         foreach ($schemes as $scheme) {
@@ -101,7 +108,7 @@ class RouteRegisterWithPrecondition
      */
     public function forHost(string ...$hosts): RouteRegisterWithPrecondition
     {
-        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, ...$this->conditions);
+        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, $this->typeMap, ...$this->conditions);
 
         $na = [];
         foreach ($hosts as $host) {
@@ -118,7 +125,7 @@ class RouteRegisterWithPrecondition
      */
     public function forPort(int ...$ports): RouteRegisterWithPrecondition
     {
-        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, ...$this->conditions);
+        $ret = new RouteRegisterWithPrecondition($this->container, $this->currentCondition, $this->typeMap, ...$this->conditions);
 
         $na = [];
         foreach ($ports as $port) {
@@ -136,7 +143,7 @@ class RouteRegisterWithPrecondition
     {
         $newConditions = $this->conditions;
         $newConditions[] = $this->currentCondition;
-        return new RouteRegisterInitial($this->container, ...$newConditions);
+        return new RouteRegisterInitial($this->container, $this->typeMap, ...$newConditions);
     }
 
     /**
@@ -147,7 +154,7 @@ class RouteRegisterWithPrecondition
         return new RouteRegisterWithRule(
             $this->container,
             new RoutePreconditionsContainer($this->currentCondition, ...$this->conditions),
-            new RouteRuleCapsule($rule)
+            new RouteRuleCapsule($rule, $this->typeMap)
         );
     }
 }

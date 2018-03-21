@@ -18,6 +18,8 @@ use IteratorAggregate;
  * @copyright 2018 Bellisq. All Rights Reserved.
  * @package bellisq/router
  * @since 1.0.0
+ *
+ * @internal
  */
 class RoutesContainer
     implements IteratorAggregate, ArrayAccess, Countable

@@ -8,14 +8,17 @@ use Bellisq\Router\RouteParameters;
 
 
 /**
- * [Class] Route Constraint Capsule (Immutable)
+ * [Class] Route Regex Constraint Capsule (Immutable)
  *
  * @author Showsay You <akizuki.c10.l65@gmail.com>
  * @copyright 2018 Bellisq. All Rights Reserved.
  * @package bellisq/router
  * @since 1.0.0
+ *
+ * @internal
  */
-class RouteConstraintCapsule
+class RouteRegexConstraintCapsule
+    implements RouteConstraintCapsuleInterface
 {
     /** @var string */
     private $paramName;
@@ -24,7 +27,7 @@ class RouteConstraintCapsule
     private $regex;
 
     /**
-     * RouteConstraint constructor.
+     * RouteRegexConstraintCapsule constructor.
      *
      * @param string $paramName
      * @param string $regex

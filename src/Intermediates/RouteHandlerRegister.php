@@ -21,6 +21,8 @@ use Strict\Property\Utility\StrictPropertyContainer;
  * @since 1.0.0
  *
  * @property-write Closure $handler
+ *
+ * @internal
  */
 class RouteHandlerRegister
     extends StrictPropertyContainer

@@ -4,6 +4,7 @@ namespace Bellisq\Router\Intermediates;
 
 use Bellisq\Router\Capsules\RoutePreconditionCapsule;
 use Bellisq\Router\Containers\RoutesContainer;
+use Bellisq\TypeMap\TypeMapInterface;
 
 
 /**
@@ -13,6 +14,8 @@ use Bellisq\Router\Containers\RoutesContainer;
  * @copyright 2018 Bellisq. All Rights Reserved.
  * @package bellisq/router
  * @since 1.0.0
+ *
+ * @internal
  */
 class RouteRegisterInitial
 {
@@ -22,16 +25,20 @@ class RouteRegisterInitial
     /** @var RoutePreconditionCapsule[] */
     protected $conditions;
 
+    private $typeMap;
+
     /**
      * RouteRegisterInitial constructor.
      *
-     * @param RoutesContainer            $container
+     * @param RoutesContainer $container
+     * @param TypeMapInterface|null $typeMap
      * @param RoutePreconditionCapsule[] ...$conditions
      */
-    public function __construct(RoutesContainer $container, RoutePreconditionCapsule ...$conditions)
+    public function __construct(RoutesContainer $container, ?TypeMapInterface $typeMap, RoutePreconditionCapsule ...$conditions)
     {
         $this->container = $container;
         $this->conditions = $conditions;
+        $this->typeMap = $typeMap;
     }
 
     /**
@@ -75,6 +82,6 @@ class RouteRegisterInitial
      */
     private function createRRWRCopy(): RouteRegisterWithPrecondition
     {
-        return new RouteRegisterWithPrecondition($this->container, new RoutePreconditionCapsule, ...$this->conditions);
+        return new RouteRegisterWithPrecondition($this->container, new RoutePreconditionCapsule, $this->typeMap, ...$this->conditions);
     }
 }

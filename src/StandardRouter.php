@@ -7,6 +7,7 @@ use Bellisq\Request\Request;
 use Bellisq\Router\Capsules\RouteHandlerCapsule;
 use Bellisq\Router\Containers\RoutesContainer;
 use Bellisq\Router\RouterInterface;
+use Bellisq\TypeMap\TypeMapInterface;
 
 
 /**
@@ -33,10 +34,11 @@ abstract class StandardRouter
 
     /**
      * StandardRouter constructor.
+     * @param TypeMapInterface|null $typeMap
      */
-    public function __construct()
+    public function __construct(?TypeMapInterface $typeMap = null)
     {
-        static::registerRoutes($register = new RouteRegister($container = new RoutesContainer));
+        static::registerRoutes($register = new RouteRegister($container = new RoutesContainer, $typeMap));
         $this->routesContainer = $container;
     }
 

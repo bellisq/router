@@ -8,6 +8,7 @@ use Bellisq\Router\Containers\RoutePreconditionsContainer;
 use Bellisq\Router\Containers\RoutesContainer;
 use Bellisq\Router\Intermediates\RouteRegisterInitial;
 use Bellisq\Router\Intermediates\RouteRegisterWithRule;
+use Bellisq\TypeMap\TypeMapInterface;
 
 
 /**
@@ -22,14 +23,18 @@ class RouteRegister
     extends RouteRegisterInitial
     implements RoutableInterface
 {
+    private $typeMap;
+
     /**
      * RouteRegister constructor.
      *
      * @param RoutesContainer $container
+     * @param TypeMapInterface|null $typeMap
      */
-    public function __construct(RoutesContainer $container)
+    public function __construct(RoutesContainer $container, ?TypeMapInterface $typeMap = null)
     {
-        parent::__construct($container);
+        $this->typeMap = $typeMap;
+        parent::__construct($container, $typeMap);
     }
 
     /**
@@ -40,7 +45,7 @@ class RouteRegister
         return new RouteRegisterWithRule(
             $this->container,
             new RoutePreconditionsContainer(new RoutePreconditionCapsule),
-            new RouteRuleCapsule($rule)
+            new RouteRuleCapsule($rule, $this->typeMap)
         );
     }
 }
