@@ -6,6 +6,9 @@ use Bellisq\Router\Exceptions\RouteRuleCapsule\DuplicateParameterNameException;
 use Bellisq\Router\Exceptions\RouteRuleCapsule\InvalidConstraintException;
 use Bellisq\Router\Capsules\RouteRegexConstraintCapsule;
 use Bellisq\Router\RouteParameters;
+use Bellisq\TypeMap\TypeMapInterface;
+use Bellisq\TypeMap\Utility\ObjectContainer;
+use Closure;
 
 
 /**
@@ -32,13 +35,18 @@ class RouteRuleCapsule
     /** @var RouteConstraintCapsuleInterface[] */
     private $constraints = [];
 
+    /** @var TypeMapInterface|ObjectContainer */
+    private $injection;
+
     /**
      * RouteRuleCapsule constructor.
      *
      * @param string $rule
+     * @param TypeMapInterface|null $constraintClosureInjection
      */
-    public function __construct(string $rule)
+    public function __construct(string $rule, ?TypeMapInterface $constraintClosureInjection = null)
     {
+        $constraintClosureInjection = $constraintClosureInjection ?? new ObjectContainer;
         $rule = '/' . trim($rule, '/');
         preg_match_all(
             '@\\{(' .
@@ -89,6 +97,7 @@ class RouteRuleCapsule
 
         $this->stdRule = $raw;
         $this->regex = "@^{$regex}$@u";
+        $this->injection = $constraintClosureInjection;
     }
 
     /**
@@ -106,6 +115,19 @@ class RouteRuleCapsule
 
         $ret = clone $this;
         $ret->constraints[] = new RouteRegexConstraintCapsule($paramName, $regex);
+        return $ret;
+    }
+
+    /**
+     * @param Closure $closure
+     * @return RouteRuleCapsule
+     *
+     * @since 1.4.0
+     */
+    public function withClosureConstraint(Closure $closure): self
+    {
+        $ret = clone $this;
+        $ret->constraints[] = new RouteClosureConstraintCapsule($closure, $this->injection);
         return $ret;
     }
 

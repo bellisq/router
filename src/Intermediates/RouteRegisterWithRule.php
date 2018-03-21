@@ -3,6 +3,7 @@
 namespace Bellisq\Router\Intermediates;
 
 use Bellisq\Router\Intermediates\RouteHandlerRegister;
+use Closure;
 
 
 /**
@@ -53,6 +54,19 @@ class RouteRegisterWithRule
     {
         $ret = clone $this;
         $ret->routeRuleCapsule = $this->routeRuleCapsule->withRegexConstraint($paramName, $regex);
+        return $ret;
+    }
+
+    /**
+     * @param Closure $closure
+     * @return RouteRegisterWithRule
+     *
+     * @since 1.4.0
+     */
+    public function withClosureConstraint(Closure $closure): self
+    {
+        $ret = clone $this;
+        $ret->routeRuleCapsule = $this->routeRuleCapsule->withClosureConstraint($closure);
         return $ret;
     }
 }

@@ -21,7 +21,8 @@ class ZZRouteRuleCapsuleTest
     {
         $this->routeRule = (new RouteRuleCapsule('/{:username}/{:month}/{?type}'))
             ->withRegexConstraint('username', '@^[a-zA-Z_][a-zA-Z0-9_]{4,14}$@u')
-            ->withRegexConstraint('month', '@^(10|11|12|[1-9]{1})$@');
+            ->withRegexConstraint('month', '@^(10|11|12|[1-9]{1})$@')
+            ->withClosureConstraint(function (): bool { return true; });
     }
 
     public function testInvalidConstraint()
